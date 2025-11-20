@@ -1,0 +1,58 @@
+{
+    "high": [
+        "Passwords",
+        "Password hints",
+        "Credit cards",
+        "Credit card CVV",
+        "Encrypted keys",
+        "Bank account numbers",
+        "Security questions and answers",
+        "Biometric data",
+        "Photos",
+        "PINs",
+        "Ethnicities",
+        "Races",
+        "Genders",
+        "Religions"
+    ],
+    "medium": [
+        "Email addresses",
+        "Email messages",
+        "Phone numbers",
+        "Physical addresses",
+        "Dates of birth",
+        "Names",
+        "Usernames",
+        "Nicknames",
+        "Browsing histories",
+        "Purchase histories",
+        "Device information",
+        "Medical records",
+        "Geographic locations",
+        "Government issued IDs",
+        "Historical passwords",
+        "Payment histories",
+        "Payment methods",
+        "SMS messages",
+        "Social connections",
+        "Social security numbers"
+    ],
+    "low": [
+        "Apps installed on devices",
+        "IP addresses",
+        "MAC addresses",
+        "IMEI numbers",
+        "Social media profiles",
+        "Spoken languages"
+    ],
+    "weight": {
+        "high": 30,
+        "medium": 10,
+        "low": 5
+    },
+    "event_tag": {
+        "malware": 25,
+        "stealerlog": 40,
+        "verified": 5
+    }
+}
