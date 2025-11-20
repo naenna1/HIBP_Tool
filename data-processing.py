@@ -54,10 +54,11 @@ def parse_breach_list(json_data: list[dict]) -> List[Breach]:
 def parse_paste_list(json_data: list[dict]) -> List[Paste]:
     pastes = []
     for item in json_data:
+        d = item.get('Date')
         paste = Paste(
             id = item.get('Id'),
             source = item.get('Source'),
-            date = item.get('Date'),
+            date = datetime.strptime(d, '%Y-%m-%dT%H:%M:%SZ').date() if d else None,
             email_count = item.get('EmailCount'),
         )
         pastes.append(paste)
