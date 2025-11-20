@@ -83,7 +83,7 @@ def format_breach_summary(summary: BreachSummary) -> str:
 
 def format_warning(message: str) -> str:
     return (
-        f"\n{'' * 60}\n"
+        f"\n{'-' * 60}\n"
         f"⚠️  WARNUNG:\n{message}\n"
         f"{'#' * 60}"
     )

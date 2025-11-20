@@ -68,7 +68,7 @@ def _to_serializable(obj):
 
 
 # 4. Ergebnisse als JSON speichern.
-def save_results_to_json(data, filepath):
+def save_results_to_json(data, filepath: str) -> None:
 # Prüfen, ob data eine Liste ist.
     if isinstance(data, list):
 # Liste wird in dict umgewandelt.
@@ -86,7 +86,7 @@ def save_results_to_json(data, filepath):
 
 # 4.1 Ergebnisse als CSV speichern.
 def save_results_to_csv(data, filepath: str) -> None:
-        pass
+    pass
 
 
 

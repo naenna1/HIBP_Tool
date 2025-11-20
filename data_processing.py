@@ -1,15 +1,19 @@
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from typing import Optional, List
-from datetime import datetime
 import json
 import math
+import os
+
+# Basisverzeichnis dieser Datei (data_processing.py)
+BASE_DIR = os.path.dirname(__file__)
+RISK_MAP_PATH = os.path.join(BASE_DIR, "data_class_risk_map.json")
 
 @dataclass
 class Breach:
     name: str
     domain: str
-    breach_date: date
+    breach_date: Optional[date]
     added_date: Optional[date]
     data_classes: List[str]
     pwn_count: int
@@ -21,7 +25,7 @@ class Breach:
 class Paste:
     id: str
     source: str
-    date: Optional[datetime]
+    date: Optional[date]
     email_count: Optional[int]
 
 @dataclass
@@ -68,6 +72,8 @@ def parse_paste_list(json_data: list[dict]) -> List[Paste]:
 def group_breaches_by_year(breaches: List[Breach]) -> dict[int, List[Breach]]:
     result = {}
     for breach in breaches:
+        if breach.breach_date is None:
+            continue
         result.setdefault(breach.breach_date.year, []).append(breach)
     return result
 
@@ -86,7 +92,7 @@ def group_breaches_by_domain(breaches: List[Breach]) -> dict[str, List[Breach]]:
 #   - there are 150 entries in dataclasses, typical labels are chosen manually to calc.
 
 def calculate_risk_score(breaches: List[Breach]) -> float:
-    with open("data_class_risk_map.json","r",encoding="utf-8") as f:
+    with open(RISK_MAP_PATH,"r",encoding="utf-8") as f:
         risk_factors = json.load(f)
 
     high = risk_factors['high']

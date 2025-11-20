@@ -2,9 +2,10 @@
 # api_client.py  (Anna)
 # ============================
 import requests
+from dotenv import load_dotenv
 from utils_and_tests import load_api_key_from_env
 import os
-
+load_dotenv()
 
 BASE_URL = 'https://haveibeenpwned.com/api/v3'
 
@@ -21,14 +22,14 @@ class RateLimitError(ApiError):
 def _build_headers() -> dict[str, str]:
     """Baut den Standard-Header für Anfragen"""
     return {
-        'api_key': load_api_key_from_env(),
-        'user_agent': os.getenv('HIBP_USER_AGENT', 'hibp-team-project/1.0 (student project)')
+        'hibp-api-key': load_api_key_from_env(),
+        'user-agent': os.getenv('HIBP_USER_AGENT', 'hibp-team-project/1.0 (student project)')
     }
 
 
 def send_request(endpoint: str, params: dict | None = None) -> dict | list:
     """Zentrale Request-Funktion zur HIBP-API."""
-    url = BASE_URL + endpoint
+    url = f'{BASE_URL}{endpoint}'
     headers = _build_headers()
     try:
         response = requests.get(url, headers=headers, params=params, timeout=10)
