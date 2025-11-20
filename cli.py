@@ -1,9 +1,6 @@
 ### Imports : ###
-#
-#
-#
-#
-#
+from ui_format import format_warning
+from utils_and_tests import validate_email
 
 
 ### Menükörper ###
@@ -14,7 +11,6 @@ def print_menu():
     print("2: Show Pastes for email")
     print("3: Show all breaches")
     print("4: Show the data classes")
-    print("b: Get back")
     print("x: Finished program")
 
 
@@ -22,27 +18,23 @@ def print_menu():
 
 def read_menu_choice():
     """Reads and validates the user´s menu choice"""
-    choice = input("Please enter your choice: ").strip().lower()
+    while True:
+        choice = input("Please enter your choice: ").strip().lower()
 
-    if choice in ["1", "2", "3", "4", "b", "x"]:
-        return choice
-    else:
-        print("It´s not correct. Please try again.")
-        return read_menu_choice()
+        if choice in ["1", "2", "3", "4", "x"]:
+            return choice
+
+        print('Invalid choice. Please try again.')
 
 
 
 ### Funktion Email ###
 def read_email_input():
     while True:
-        email = input("\nPlease write your email or go back (b).").strip()
+        email = input("\nPlease enter an email (or press Enter to cancel): ").strip().lower()
 
-        if email.lower() == "b":
-            return "b"
-
-        if not email:
-            print(format_warning("Input cannot be empty."))
-            continue
+        if email == "":
+            return None
 
         if not validate_email(email):
             print(format_warning("Invalid email address. Please try again."))
@@ -51,8 +43,6 @@ def read_email_input():
         return email
 
 
-
-# Beide Funktionen in einer Schleife
 def main():
     while True:
         print_menu()
@@ -62,31 +52,29 @@ def main():
             print("Thank you for using this program.")
             break
 
-        # 1 – Check breaches
+        if choice in ["1", "2"]:
+            email = read_email_input()
+            if email is None:
+                continue
+
         if choice == "1":
-            email = read_email_input()
-            if email == "b":
-                continue
-            print(f"You have chosen {choice}. (Breaches for {email})")
+            result = get_breached_account(email)
+            print(result)
 
-        # 2 – Show pastes
         elif choice == "2":
-            email = read_email_input()
-            if email == "b":
-                continue
-            print(f"Pastes for {email}")
+            result = get_paste_account(email)
+            print(result)
 
-        # 3 – All breaches
         elif choice == "3":
-            print("Showing all breaches...")
+            result = get_all_breaches()
+            print(result)
 
-        # 4 – Data classes
         elif choice == "4":
-            print("Showing data classes...")
+            result = get_data_classes()
+            print(result)
 
 
-# Programm starten
-if ___name___=="___main___":
+if __name__ == "__main__":
     main()
 
 
