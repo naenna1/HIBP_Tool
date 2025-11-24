@@ -2,49 +2,49 @@ import os
 import re
 import json
 import csv
-# Prüft, ob obj eine Dataclass-Instanz ist und wandelt in dict um
+# Checks whether obj is a Dataclass instance and converts it to dict
 from dataclasses import is_dataclass, asdict
 
 
-# Erzeugt E-Mail-Regex:
-# - enthält genau ein '@'
-# - keine Leerzeichen
-# - irgendwas vor/nach '@' und mindestens ein Punkt im Domain-Teil
+# Generates email regex:
+# - contains exactly one ‘@’
+# - no spaces
+# - anything before/after ‘@’ and at least one dot in the domain part
 
 EMAIL_REGEX = re.compile(
     r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
 )
 
-# 1. Funktion zur Prüfung für E-Mail-Adressen.
-#     Anforderungen:
-#   - darf nicht leer sein
-#   - keine führenden/trailing Spaces
-#   - grobe Struktur: <irgendwas>@<irgendwas>.<tld>
+# 1. Function for checking email addresses.
+#     Requirements:
+#   - Must not be empty
+#   - No leading/trailing spaces
+#   - Rough structure: <something>@<something>.<tld>
 
 def validate_email(email: str) -> bool:
-# Wenn E-Mail kein string ist
+# If email is not a string
     if not isinstance(email, str):
         return False
-# Entfernt Leerzeichen am Anfang und Ende
+# Removes spaces at the beginning and end
     email = email.strip()
 # Prüft, ob E-Mail leer
     if not email:
         return False
-# Wendet regex von oben an
+# Applies the regex from above
     return EMAIL_REGEX.match(email) is not None
 
 
 
 
 
-# 2. API-Key aus Umgebungsvariablen laden.
-# var_name: Name der Umgebungsvariable, standardmäßig "HIBP_API_KEY".
+# 2. Load API key from environment variables.
+# var_name: Name of the environment variable, default is “HIBP_API_KEY”.
 def load_api_key_from_env(var_name: str = "HIBP_API_KEY") -> str:
-# Greift auf die Umgebungsvariable zu, gibt None zurück, wenn sie nicht existiert (statt Fehler).
+# Accesses the environment variable, returns None if it does not exist (instead of an error).
     value = os.getenv(var_name)
-# Fängt None und leere Strings ab
+# Catches None and empty strings
     if not value:
-# Fehler zum Setzen eines API-Keys
+# Error setting an API key
         raise RuntimeError(
             f"Environment variable '{var_name}' is not set "
             "or empty. Please enter a valid HIBP API key."
@@ -57,7 +57,7 @@ def load_api_key_from_env(var_name: str = "HIBP_API_KEY") -> str:
 
 
 
-# 3. Hilfsfunktion: Dataclasses → dict (Vorbereitung für json)
+# 3. Auxiliary function: Dataclasses → dict (preparation for json)
 def _to_serializable(obj):
     if is_dataclass(obj):
         return asdict(obj)
@@ -67,13 +67,13 @@ def _to_serializable(obj):
 
 
 
-# 4. Ergebnisse als JSON speichern.
+# 4. Save results as JSON.
 def save_results_to_json(data, filepath: str) -> None:
-# Prüfen, ob data eine Liste ist.
+# Check if data is a list
     if isinstance(data, list):
-# Liste wird in dict umgewandelt.
+# List is converted to dict.
         processed = [_to_serializable(item) for item in data]
-# Wenn keine Liste, Einzelobjekt übergeben
+# If no list, pass single object
     else:
         processed = _to_serializable(data)
 

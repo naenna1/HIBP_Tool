@@ -20,7 +20,6 @@ from data_processing import (
 )
 
 
-### Menükörper ###
 def print_menu():
     """Print the main menu to the console"""
     print("\n=== Have I Been Pwned – Checker ===")
@@ -31,7 +30,7 @@ def print_menu():
     print("x: Finished program")
 
 
-### Funktion des Menükörpers ###
+### Menu ###
 
 def read_menu_choice():
     """Reads and validates the user´s menu choice"""
@@ -45,7 +44,6 @@ def read_menu_choice():
 
 
 
-### Funktion Email ###
 def read_email_input():
     while True:
         email = input("\nPlease enter an email (or press Enter to cancel): ").strip().lower()
@@ -64,7 +62,7 @@ def main():
     while True:
         print_menu()
         choice = read_menu_choice()
-        email = None # Eigentlich unnötig, aber sonst beschwert Linter sich :D
+        email = None
 
         if choice == "x":
             print("Thank you for using this program.")
@@ -73,7 +71,6 @@ def main():
         if choice in ["1", "2"]:
             email = read_email_input()
             if email is None:
-                # User hat mit Enter abgebrochen → zurück ins Menü
                 continue
 
         if choice == "1":
@@ -119,6 +116,7 @@ def main():
                 print(format_info("Available data classes:"))
                 for dc in data_classes:
                     print(f" - {dc}")
+
 
 
 if __name__ == "__main__":
