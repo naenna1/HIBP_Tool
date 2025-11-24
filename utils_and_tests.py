@@ -41,7 +41,7 @@ def validate_email(email: str) -> bool:
 # var_name: Name der Umgebungsvariable, standardmäßig "HIBP_API_KEY".
 def load_api_key_from_env(var_name: str = "HIBP_API_KEY") -> str:
 # Greift auf die Umgebungsvariable zu, gibt None zurück, wenn sie nicht existiert (statt Fehler).
-    value = os.environ.get(var_name)
+    value = os.getenv(var_name)
 # Fängt None und leere Strings ab
     if not value:
 # Fehler zum Setzen eines API-Keys
@@ -88,24 +88,3 @@ def save_results_to_json(data, filepath: str) -> None:
 def save_results_to_csv(data, filepath: str) -> None:
     pass
 
-
-
-
-# 5. Demo
-if __name__ == "__main__":
-# Es wird eine Liste E-Mails angelegt mit ein paar Testfällen.
-    emails = [
-        "test@example.com",
-        "invalid-email",
-        "no-at-sign.example.com",
-        "spaces@trim.de",
-        "also@not_valid",
-        "",
-    ]
-
-    print("Quick demo check for validate_email:")
-    for e in emails:
-    # e!r zeigt den String mit Anführungszeichen.
-    # :30 Platz auf 30 Zeichen auffüllen, damit die Ausgabe schön untereinander steht.
-    # validate_email(e) Ruft die Funktion von oben auf → ergibt True oder False.
-        print(f" {e!r:30} → {validate_email(e)}")

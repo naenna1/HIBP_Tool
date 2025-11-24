@@ -1,121 +1,57 @@
-# Formatierung für Breaches, Pastes, Warnungen und Infos
+# Imports:
+from typing import List
+from data_processing import Breach, Paste, BreachSummary
+from colorama import Fore, Style, init
+init(autoreset=True)
 
-from textwrap import fill
-from typing import List, Dict, Any
-
-Breach = Dict[str, Any]
-Paste = Dict[str, Any]
-BreachSummary = Dict[str, Any]
-
-
-# Einzelnen Breach formatiert darstellen
-
-def format_breach(breach: Breach) -> str:
-
-    name = breach.get("Name", "Unbekannt")
-    domain = breach.get("Domain", "Keine Domain")
-    date = breach.get("BreachDate", "N/A")
-    desc = breach.get("Description", "Keine Beschreibung").strip()
-
-    desc = fill(desc, width=70)
-
+# formatiert einen Datenleakeintrag:
+def format_breach(breach) -> str:
     return (
-        f"\n{'_' * 60}\n"
-        f"🔐 Datenleck: {name}\n"
-        f"🌐 Domain:    {domain}\n"
-        f"📅 Datum:     {date}\n"
-        f"\n📝 Beschreibung:\n{desc}\n"
-        f"{'_' * 60}"
+        f"{Fore.RED}---❌ Breach ❌---{Style.RESET_ALL}\n"
+        f"Name: {breach.name}\n"
+        f"Domain: {breach.domain}\n"
+        f"Date: {breach.breach_date.isoformat() if breach.breach_date else 'N/A'}\n"
+        f"Data exposed: {', '.join(breach.data_classes)}\n"
+        f"Verified: {'Yes' if breach.is_verified else 'No'}\n"
     )
 
-
-# Liste von Breaches formatiert darstellen
-
+# formatiert eine Datenleakliste:
 def format_breach_list(breaches: List[Breach]) -> str:
     if not breaches:
-        return format_info("Keine Datenlecks gefunden.")
+        return format_info("No breaches found.")
 
     return "\n".join(format_breach(b) for b in breaches)
 
-
-# Liste von Pastes formatiert darstellen
-
+# formatiert eine Liste von Paste (Pastebin= Eintrag, der Daten in die veröffentlicht wurden)
 def format_paste_list(pastes: List[Paste]) -> str:
     if not pastes:
-        return format_info("Keine Pastes gefunden.")
-
-    blocks = []
-    for p in pastes:
-        title = p.get("Title", "Kein Titel")
-        source = p.get("Source", "N/A")
-        date = p.get("Date", "N/A")
-
-        block = (
-            f"\n{'#' * 60}\n"
-            f"📝 Paste-Eintrag\n"
-            f"Titel:  {title}\n"
-            f"Quelle: {source}\n"
-            f"Datum:  {date}\n"
-            f"{'_' * 60}"
+        return format_info("No pastes found.")
+    result = []
+    for paste in pastes:
+        result.append(
+            f"{Fore.BLUE}---📄 Paste 📄---{Style.RESET_ALL}\n"
+            f"ID: {paste.id}\n"
+            f"Source: {paste.source}\n" # Datenquelle
+            f"Title: {paste.title}\n"
+            f"Date: {paste.date or 'N/A'}\n"
         )
-        blocks.append(block)
+    return "\n".join(result)
 
-    return "\n".join(blocks)
-
-
-# Breach Summary (Risiko-Score + Gesamtübersicht)
-
+# Zusammenfassung aller Breaches ( Verstößen)
 def format_breach_summary(summary: BreachSummary) -> str:
-
-    total = summary.get("total_breaches", 0)
-    risk = summary.get("risk_score", "N/A")
+    total = len(summary.breaches)
+    risk = summary.risk_score
 
     return (
-        f"\n{'_' * 60}\n"
-        f"📊 BREACH-ÜBERSICHT\n"
-        f"Anzahl Leaks: {total}\n"
-        f"Risiko-Score: {risk} / 100\n"
-        f"{'_' * 60}"
+        f"{Fore.RED}---🛑 Breaches Overview 🛑---{Style.RESET_ALL}\n"
+        f"Amount of Leaks: {total}\n"
+        f"Risk-Score: {risk}%\n"
     )
 
-
-# Warnung farblich hervorheben
-
+# zeigt Warnungen an:
 def format_warning(message: str) -> str:
-    return (
-        f"\n{'-' * 60}\n"
-        f"⚠️  WARNUNG:\n{message}\n"
-        f"{'#' * 60}"
-    )
+    return f"{Fore.YELLOW} ⚠️ {message}{Style.RESET_ALL}"
 
-
-# Info / normaler Hinweis
-
+# zeigt neutrale Hinweise an:
 def format_info(message: str) -> str:
-    return (
-        f"\n{'-' * 60}\n"
-        f"{message}\n"
-        f"{'-' * 60}"
-    )
-
-
-
-
-
-#test
-if __name__ == "__main__":
-    test_breach = {
-        "Name": "Adobe Leak",
-        "Domain": "adobe.com",
-        "BreachDate": "2019-10-04",
-        "Description": "Passwort-Leak durch Sicherheitslücke."
-    }
-
-    print("\n--- Test: Einzelner Breach ---")
-    print(format_breach(test_breach))
-
-    print("\n--- Test: Warning ---")
-    print(format_warning("Dies ist nur ein Test!"))
-
-    print("\n--- Test: Info ---")
-    print(format_info("Alles funktioniert erfolgreich!"))
+    return f"{Fore.BLUE} ℹ️ {message}{Style.RESET_ALL}"
