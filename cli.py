@@ -18,6 +18,8 @@ from data_processing import (
     parse_paste_list,
     build_breach_summary,
 )
+
+
 ### Menükörper ###
 def print_menu():
     """Print the main menu to the console"""

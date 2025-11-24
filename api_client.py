@@ -20,11 +20,9 @@ class RateLimitError(ApiError):
     pass
 
 def _build_headers() -> dict[str, str]:
+    """Builds the standard header for requests"""
     api_key = load_api_key_from_env()
     user_agent = os.getenv('HIBP_USER_AGENT', 'hibp-team-project/1.0 (student project)')
-
-    print("DEBUG hibp-api-key:", repr(api_key))
-    print("DEBUG user-agent:", repr(user_agent))
 
     return {
         'hibp-api-key': api_key,
