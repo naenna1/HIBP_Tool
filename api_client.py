@@ -24,6 +24,7 @@ def _build_headers() -> dict[str, str]:
     api_key = load_api_key_from_env()
     user_agent = os.getenv('HIBP_USER_AGENT', 'hibp-team-project/1.0 (student project)')
 
+
     return {
         'hibp-api-key': api_key,
         'user-agent': user_agent,
